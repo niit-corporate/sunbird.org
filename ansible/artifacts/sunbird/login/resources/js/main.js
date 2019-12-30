@@ -8,7 +8,7 @@
 			if(dropdown){
 			dropdown.classList.add('hidedropdown');
 		    }
-			// document.getElementById('selfSingUp').classList.add('hidegooglesignin');
+		// document.getElementById('selfSingUp').classList.add('hidegooglesignin');
 			var login = document.getElementById('login');
         if(login) {
 			login.classList.add('societalbtn');
