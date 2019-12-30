@@ -7,8 +7,12 @@
 			var dropdown = document.getElementById('kc-locale-dropdown');
 			if(dropdown){
 			dropdown.classList.add('hidedropdown');
-		    }
-		// document.getElementById('selfSingUp').classList.add('hidegooglesignin');
+			}
+			var signup = document.getElementById('kc-registration');
+			if(signup){
+				signup.classList.add('hidesignup');
+			}
+			// document.getElementById('selfSingUp').classList.add('hidegooglesignin');
 			var login = document.getElementById('login');
         if(login) {
 			login.classList.add('societalbtn');
