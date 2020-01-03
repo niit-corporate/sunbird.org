@@ -45,20 +45,30 @@ class GoogleOauth {
     });
   }
   async getProfile(req) {
+    console.log("get profile calling");
     const client = this.createConnection(req);
-    if(req.query.error === 'access_denied'){
-      throw new Error('GOOGLE_ACCESS_DENIED');
+    if (req.query.error === "access_denied") {
+      throw new Error("GOOGLE_ACCESS_DENIED");
     }
-    const { tokens } = await client.getToken(req.query.code).catch(this.handleError)
-    client.setCredentials(tokens)
-    const plus = google.plus({ version: 'v1', auth: client})
-    const { data } = await plus.people.get({ userId: 'me' }).catch(this.handleError)
+    const { tokens } = await client
+      .getToken(req.query.code)
+      .catch(this.handleError);
+    const ticket = await client.verifyIdToken({
+      idToken: tokens["id_token"],
+      audience: client["_clientId"] // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+    const payload = ticket.getPayload();
+    const userid = payload["sub"];
+    console.log(userid);
+    console.log(payload["email"]);
+    client.setCredentials(tokens);
+
     return {
-      name: data.displayName,
-      emailId: _.get(_.find(data.emails, function (email) {
-        return email && email.type && email.type.toLowerCase() === 'account';
-      }), 'value')
-    }
+      name: payload.name,
+      emailId: payload.email
+    };
   }
   handleError(error){
     if(_.get(error, 'response.data')){
